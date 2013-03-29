@@ -16,54 +16,13 @@
 
 #include "btBulletDynamicsCommon.h"
 
-#include "objLoader.h"
+//#include "objLoader.h"
 
 @implementation BulletCocos3DScene
 
 -(void) dealloc {
 	[super dealloc];
 }
-
-
--(objLoader *)loadObjFile:(NSString *)objName {
-    
-    NSString* manifest_string = [[NSBundle mainBundle] pathForResource:objName
-                                                                ofType:@"obj"];
-    const char* manifest_path = [manifest_string fileSystemRepresentation];
-    
-    objLoader *objData = new objLoader();
-	objData->load((char*)manifest_path);
-    
-    NSLog(@"Number of vertices: %i\n", objData->vertexCount);
-	NSLog(@"Number of vertex normals: %i\n", objData->normalCount);
-	NSLog(@"Number of texture coordinates: %i\n", objData->textureCount);
-    NSLog(@"Number of planes: %i\n", objData->planeCount);
-    NSLog(@"Number of faces: %i\n", objData->faceCount);
-    
-    /*
-     for(int i=0; i<objData->faceCount; i++)
-     {
-     obj_face *o = objData->faceList[i];
-     printf(" face ");
-     for(int j=0; j<3; j++)
-     {
-     obj_vector* v = objData->vertexList[ o->vertex_index[j] ];
-     NSLog(@"face: %f %f %f", v->e[0], v->e[1], v->e[2]);
-     }
-     }
-     */
-    return objData;
-    
-    /*
-     
-     NSString *imageName = [NSString stringWithFormat:@"images (%d).jpeg", randIndex];
-     UIImage *image = [UIImage imageNamed:imageName];
-     cell.iconImageView1.image = image;
-     */
-    
-    
-}
-
 
 /**
  * Constructs the 3D scene.
@@ -142,6 +101,10 @@
 	// Fetch the 'hello, world' 3D text object that was loaded from the
 	// POD file and start it rotating
 	CC3MeshNode* duck = (CC3MeshNode*)[self getNodeNamed: @"LOD3sp"];
+    
+    
+    
+//    duck.
     
     
 //    CCActionInterval* partialRot = [CC3RotateBy actionWithDuration: 1.0 rotateBy: cc3v(0.0, 30.0, 0.0)];
