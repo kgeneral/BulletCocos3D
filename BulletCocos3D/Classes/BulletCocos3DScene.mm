@@ -24,6 +24,10 @@
 	[super dealloc];
 }
 
+
+-(void) initBulletPhysics {
+    
+}
 /**
  * Constructs the 3D scene.
  *

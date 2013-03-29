@@ -14,6 +14,8 @@
 		9F67B62A1705771C009F714A /* cube.pod in Resources */ = {isa = PBXBuildFile; fileRef = 9F67B629170576D1009F714A /* cube.pod */; };
 		9F67B62C17057922009F714A /* duck.pod in Resources */ = {isa = PBXBuildFile; fileRef = 9F67B62B1705791A009F714A /* duck.pod */; };
 		9F67B62E17057A2E009F714A /* bike.pod in Resources */ = {isa = PBXBuildFile; fileRef = 9F67B62D17057A24009F714A /* bike.pod */; };
+		9F67B63117058335009F714A /* hat.pod in Resources */ = {isa = PBXBuildFile; fileRef = 9F67B62F17058329009F714A /* hat.pod */; };
+		9F67B63217058336009F714A /* turbochi.pod in Resources */ = {isa = PBXBuildFile; fileRef = 9F67B63017058329009F714A /* turbochi.pod */; };
 		9FA3E55417041DB800FF618C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FA3E55317041DB800FF618C /* QuartzCore.framework */; };
 		9FA3E55617041DB800FF618C /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FA3E55517041DB800FF618C /* OpenGLES.framework */; };
 		9FA3E55817041DB800FF618C /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FA3E55717041DB800FF618C /* OpenAL.framework */; };
@@ -468,6 +470,8 @@
 		9F67B629170576D1009F714A /* cube.pod */ = {isa = PBXFileReference; lastKnownFileType = file; name = cube.pod; path = Resources/cube.pod; sourceTree = "<group>"; };
 		9F67B62B1705791A009F714A /* duck.pod */ = {isa = PBXFileReference; lastKnownFileType = file; path = duck.pod; sourceTree = "<group>"; };
 		9F67B62D17057A24009F714A /* bike.pod */ = {isa = PBXFileReference; lastKnownFileType = file; path = bike.pod; sourceTree = "<group>"; };
+		9F67B62F17058329009F714A /* hat.pod */ = {isa = PBXFileReference; lastKnownFileType = file; path = hat.pod; sourceTree = "<group>"; };
+		9F67B63017058329009F714A /* turbochi.pod */ = {isa = PBXFileReference; lastKnownFileType = file; path = turbochi.pod; sourceTree = "<group>"; };
 		9FA3E55017041DB800FF618C /* BulletCocos3D.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BulletCocos3D.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FA3E55317041DB800FF618C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		9FA3E55517041DB800FF618C /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -1579,6 +1583,8 @@
 				9F67B629170576D1009F714A /* cube.pod */,
 				9F67B62B1705791A009F714A /* duck.pod */,
 				9F67B62D17057A24009F714A /* bike.pod */,
+				9F67B62F17058329009F714A /* hat.pod */,
+				9F67B63017058329009F714A /* turbochi.pod */,
 				9FA3E56717041DB800FF618C /* Default.png */,
 				9FA3E56917041DB800FF618C /* Default-Landscape~ipad.png */,
 				9FA3E56B17041DB800FF618C /* fps_images.png */,
@@ -3447,6 +3453,8 @@
 				9FA3E8BA17041DBC00FF618C /* hello-world.pod in Resources */,
 				9FA3EDB5170422F100FF618C /* Doxyfile in Resources */,
 				9F67B62A1705771C009F714A /* cube.pod in Resources */,
+				9F67B63117058335009F714A /* hat.pod in Resources */,
+				9F67B63217058336009F714A /* turbochi.pod in Resources */,
 				9F67B62C17057922009F714A /* duck.pod in Resources */,
 				9FA3EDE6170422F100FF618C /* ApplyForces.hlsl in Resources */,
 				9FA3EDE7170422F100FF618C /* ComputeBounds.hlsl in Resources */,
