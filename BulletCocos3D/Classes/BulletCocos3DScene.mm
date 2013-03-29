@@ -13,9 +13,6 @@
 #import "CC3Camera.h"
 #import "CC3Light.h"
 
-
-#include "btBulletDynamicsCommon.h"
-
 //#include "objLoader.h"
 
 @implementation BulletCocos3DScene
@@ -23,11 +20,172 @@
 -(void) dealloc {
 	[super dealloc];
 }
+-(void)addBox:(btVector3)position {
+    //create a dynamic rigidbody
+    
+    btCollisionShape* colShape = new btBoxShape(btVector3(1,1,1));
+    //btCollisionShape* colShape = new btSphereShape(btScalar(1.));
+    collisionShapes.push_back(colShape);
+    
+    /// Create Dynamic Objects
+    btTransform startTransform;
+    startTransform.setIdentity();
+    
+    btScalar	mass(1.f);
+    
+    //rigidbody is dynamic if and only if mass is non zero, otherwise static
+    bool isDynamic = (mass != 0.f);
+    
+    btVector3 localInertia(0,0,0);
+    if (isDynamic)
+        colShape->calculateLocalInertia(mass,localInertia);
+    
+    startTransform.setOrigin(position);
+    
+    //using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
+    btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
+    btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,myMotionState,colShape,localInertia);
+    btRigidBody* body = new btRigidBody(rbInfo);
+    
+    btVector3 initialForce(0,-1500,0);
+    btVector3 relPos(0,0,0);
+    //body->applyCentralForce(initialForce);
+    body->applyForce(initialForce, relPos);
+    //    body->applyImpulse(<#const btVector3 &impulse#>, <#const btVector3 &rel_pos#>)
+    
+    // impulse = force * delta_time
+    //body->applyCentralImpulse(0,-2000,0);
+    /*
+     void	applyForce(const btVector3& force, const btVector3& rel_pos)
+     {
+     applyCentralForce(force);
+     //http://en.wikipedia.org/wiki/Torque
+     // boldsymbol{\tau} = \mathbf{r} \times \mathbf{F},
+     applyTorque(rel_pos.cross(force*m_linearFactor));
+     }
+     
+     */
+    
+    //Mathematically, torque is defined as the cross product of the lever-arm distance and force, which tends to produce rotation.
+    //
+    
+    
+    dynamicsWorld->addRigidBody(body);
+}
 
 
 -(void) initBulletPhysics {
+    ///-----initialization_start-----
     
+	///collision configuration contains default setup for memory, collision setup. Advanced users can create their own configuration.
+    collisionConfiguration = new btDefaultCollisionConfiguration();
+    
+	///use the default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
+    dispatcher = new	btCollisionDispatcher(collisionConfiguration);
+    
+	///btDbvtBroadphase is a good general purpose broadphase. You can also try out btAxis3Sweep.
+    overlappingPairCache = new btDbvtBroadphase();
+    
+	///the default constraint solver. For parallel processing you can use a different solver (see Extras/BulletMultiThreaded)
+    solver = new btSequentialImpulseConstraintSolver;
+    
+    dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher,overlappingPairCache,solver,collisionConfiguration);
+    
+	dynamicsWorld->setGravity(btVector3(0,-10,0));
+    
+    ///create a few basic rigid bodies
+	btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(50.),btScalar(50.),btScalar(50.)));
+    
+	//keep track of the shapes, we release memory at exit.
+	//make sure to re-use collision shapes among rigid bodies whenever possible!
+    //	btAlignedObjectArray<btCollisionShape*> collisionShapes;
+    
+	collisionShapes.push_back(groundShape);
+    
+	btTransform groundTransform;
+	groundTransform.setIdentity();
+	groundTransform.setOrigin(btVector3(0,-50,0));
+    
+	{
+		btScalar mass(0.);
+        
+		//rigidbody is dynamic if and only if mass is non zero, otherwise static
+		bool isDynamic = (mass != 0.f);
+        
+		btVector3 localInertia(0,0,0);
+		if (isDynamic)
+			groundShape->calculateLocalInertia(mass,localInertia);
+        
+		//using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
+		btDefaultMotionState* myMotionState = new btDefaultMotionState(groundTransform);
+		btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,myMotionState,groundShape,localInertia);
+		btRigidBody* body = new btRigidBody(rbInfo);
+        
+        
+        
+		//add the body to the dynamics world
+		dynamicsWorld->addRigidBody(body);
+	}
+    
+    
+
+        
+         [self addBox:btVector3(2,10,0)];
+         [self addBox:btVector3(2,15,0)];
+         [self addBox:btVector3(2,19,0)];
+         [self addBox:btVector3(5,10,0)];
+         [self addBox:btVector3(1,10,0)];
+         [self addBox:btVector3(1,10,0)];
+         [self addBox:btVector3(1,22,0)];
+         [self addBox:btVector3(1,25,3)];
+         [self addBox:btVector3(1,27,1)];
+         [self addBox:btVector3(1,35,2)];
+         
+
 }
+
+-(void) unloadBulletPhysics {
+    ///-----cleanup_start-----
+    int i;
+	//remove the rigidbodies from the dynamics world and delete them
+	for (i=dynamicsWorld->getNumCollisionObjects()-1; i>=0 ;i--)
+	{
+		btCollisionObject* obj = dynamicsWorld->getCollisionObjectArray()[i];
+		btRigidBody* body = btRigidBody::upcast(obj);
+		if (body && body->getMotionState())
+		{
+			delete body->getMotionState();
+		}
+		dynamicsWorld->removeCollisionObject( obj );
+		delete obj;
+	}
+    
+	//delete collision shapes
+	for (int j=0;j<collisionShapes.size();j++)
+	{
+		btCollisionShape* shape = collisionShapes[j];
+		collisionShapes[j] = 0;
+		delete shape;
+	}
+    
+	//delete dynamics world
+	delete dynamicsWorld;
+    
+	//delete solver
+	delete solver;
+    
+	//delete broadphase
+	delete overlappingPairCache;
+    
+	//delete dispatcher
+	delete dispatcher;
+    
+	delete collisionConfiguration;
+    
+	//next line is optional: it will be cleared by the destructor when the array goes out of scope
+	//collisionShapes.clear();
+}
+
 /**
  * Constructs the 3D scene.
  *
@@ -43,6 +201,9 @@
  * from the Resources folder of your project!!
  */
 -(void) initializeScene {
+    
+    // init
+    [self initBulletPhysics];
 
 	// Create the camera, place it back a bit, and add it to the scene
 	CC3Camera* cam = [CC3Camera nodeWithName: @"Camera"];
@@ -268,7 +429,12 @@
  *
  * For more info, read the notes of this method on CC3Node.
  */
--(void) updateBeforeTransform: (CC3NodeUpdatingVisitor*) visitor {}
+-(void) updateBeforeTransform: (CC3NodeUpdatingVisitor*) visitor {
+    int result = dynamicsWorld->stepSimulation(1.f/60.f,10);
+    
+    //NSLog(@"step = %d",result);
+
+}
 
 /**
  * This template method is invoked periodically whenever the 3D nodes are to be updated.
@@ -284,6 +450,20 @@
 	// the camera's clipping distances are, in order to determine how to position and configure
 	// the camera to view the entire scene.
 //	LogDebug(@"Camera: %@", activeCamera.fullDescription);
+    
+    //print positions of all objects
+    for (int j=dynamicsWorld->getNumCollisionObjects()-1; j>=0 ;j--)
+    {
+        btCollisionObject* obj = dynamicsWorld->getCollisionObjectArray()[j];
+        btRigidBody* body = btRigidBody::upcast(obj);
+        if (body && body->getMotionState())
+        {
+            btTransform trans;
+            body->getMotionState()->getWorldTransform(trans);
+//            [self getCubeFromVertices:obj vertexList:gCubeVertexList];
+        }
+        
+    }
 }
 
 
