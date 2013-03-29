@@ -83,7 +83,7 @@
 
 	// Create the camera, place it back a bit, and add it to the scene
 	CC3Camera* cam = [CC3Camera nodeWithName: @"Camera"];
-	cam.location = cc3v( 0.0, 0.0, 6.0 );
+	cam.location = cc3v( 0.0, 0.0, 600.0 );
 	[self addChild: cam];
 
 	// Create a light, place it back and to the left at a specific
@@ -95,7 +95,16 @@
 
 	// This is the simplest way to load a POD resource file and add the
 	// nodes to the CC3Scene, if no customized resource subclass is needed.
+    
+    // collada model sample
+    // convert with PVRGeoPOD
+    //http://collada.org/owl/browse.php?sess=0&parent=120&expand=1&order=name
+    
+    
 	//[self addContentFromPODFile: @"hello-world.pod"];
+    //[self addContentFromPODFile: @"cube.pod"];
+    [self addContentFromPODFile: @"duck.pod"];
+    //[self addContentFromPODFile: @"bike.pod"];
 	
 	// Create OpenGL ES buffers for the vertex arrays to keep things fast and efficient,
 	// and to save memory, release the vertex content in main memory because it is now redundant.
@@ -132,37 +141,131 @@
 	
 	// Fetch the 'hello, world' 3D text object that was loaded from the
 	// POD file and start it rotating
-	//CC3MeshNode* helloTxt = (CC3MeshNode*)[self getNodeNamed: @"Hello"];
-    //CCActionInterval* partialRot = [CC3RotateBy actionWithDuration: 1.0 rotateBy: cc3v(0.0, 30.0, 0.0)];
-	//[helloTxt runAction: [CCRepeatForever actionWithAction: partialRot]];
+	CC3MeshNode* duck = (CC3MeshNode*)[self getNodeNamed: @"LOD3sp"];
+    
+    
+//    CCActionInterval* partialRot = [CC3RotateBy actionWithDuration: 1.0 rotateBy: cc3v(0.0, 30.0, 0.0)];
+//	[helloTxt runAction: [CCRepeatForever actionWithAction: partialRot]];
 	
 
-    objLoader *cube = [self loadObjFile:@"cube"];
-    
-    float maxx=5.0;
-    float posx=CCRANDOM_MINUS1_1()*maxx;
-    
-    CC3MeshNode* aNode;
-    aNode = [CC3BoxNode nodeWithName: @"Simple box"];
-    CC3BoundingBox bBox;
-    bBox.minimum = cc3v(-2.0, -2.0, -1.0);
-    bBox.maximum = cc3v( 1.0,  1.0,  1.0);
-    [aNode populateAsSolidBox: bBox];
-    
 
-    
-    
-//    [aNode populateAsTriangle: bBox];
-    
-    [aNode setLocation:cc3v(posx,0.0f,-5.0f)];
-    
-    CC3Material* material = [CC3Material materialWithName:@"iron"];
-    //setColor: (ccColor3B) color
 
-    [material setColor:ccc3(123,234,134)];
-    
-    aNode.material = material;
-    [self addChild:aNode];
+    /*
+     
+     
+     objLoader *cube = [self loadObjFile:@"cube"];
+     
+     float maxx=5.0;
+     float posx=CCRANDOM_MINUS1_1()*maxx;
+     
+     CC3MeshNode* aNode;
+     aNode = [CC3BoxNode nodeWithName: @"Simple box"];
+     CC3BoundingBox bBox;
+     bBox.minimum = cc3v(-2.0, -2.0, -1.0);
+     bBox.maximum = cc3v( 1.0,  1.0,  1.0);
+     [aNode populateAsSolidBox: bBox];
+     
+         [aNode po];
+     
+     
+     [aNode setLocation:cc3v(posx,0.0f,-5.0f)];
+     
+     CC3Material* material = [CC3Material materialWithName:@"iron"];
+     //setColor: (ccColor3B) color
+     
+     [material setColor:ccc3(123,234,134)];
+     
+     aNode.material = material;
+     [self addChild:aNode];
+     
+     
+     
+     
+     #pragma mark Populating parametric triangles
+     
+     -(void) populateAsTriangle: (CC3Face) face
+     withTexCoords: (ccTex2F*) tc
+     andTessellation: (GLuint) divsPerSide {
+     
+     // Must have at least one division per side
+     divsPerSide = MAX(divsPerSide, 1);
+     
+     // The fraction of each side that each division represents.
+     // This is the barycentric coordinate division increment.
+     GLfloat divFrac = 1.0f / divsPerSide;
+     
+     // Derive the normal. All vertices on the triangle will have the same normal.
+     CC3Vector vtxNml = CC3FaceNormal(face);
+     
+     GLuint vertexCount = (divsPerSide + 2) * (divsPerSide + 1) / 2.0f;
+     GLuint triangleCount = divsPerSide * divsPerSide;
+     
+     // Prepare the vertex content and allocate space for vertices and indices.
+     [self ensureVertexContent];
+     self.allocatedVertexCapacity = vertexCount;
+     self.allocatedVertexIndexCapacity = (triangleCount * 3);
+     
+     GLuint vIdx = 0;
+     GLuint iIdx = 0;
+     
+     // Denoting the three corners of the main triangle as c0, c1 & c2, and denoting the side
+     // extending from c0 to c1 as s1, and the side extending from c0 to c2 as s2, we can work
+     // in barycentric coordinates by starting at c0, iterating the divisions on the s2, and for
+     // each divison on that side, iterating  the divisions on the side of the internal similar
+     // triangle that is parallel to s1.
+     for (GLuint i2 = 0; i2 <= divsPerSide; i2++) {
+     
+     // Calculate the barycentric weight for the current division along s2 and hold it constant
+     // as we iterate through divisions along s1 of the resulting internal similar triangle.
+     // The number of divisions on the side of the internal similar triangle is found by subtracting
+     // the current division index of s2 from the total divisions per side.
+     GLfloat bw2 = divFrac * i2;
+     GLuint divsSimSide1 = divsPerSide - i2;
+     for (GLuint i1 = 0; i1 <= divsSimSide1; i1++) {
+     
+     // Calculate the barycentric weight for the current division along s1 of the internal
+     // similar triangle. The third barycentric weight falls out automatically.
+     GLfloat bw1 = divFrac * i1;
+     GLfloat bw0 = 1.0f - bw1 - bw2;
+     CC3BarycentricWeights bcw = CC3BarycentricWeightsMake(bw0, bw1, bw2);
+     
+     // Vertex location from barycentric coordinates on the main face
+     CC3Vector vtxLoc = CC3FaceLocationFromBarycentricWeights(face, bcw);
+     [self setVertexLocation: vtxLoc at: vIdx];
+     
+     // Vertex normal is constant. Will do nothing if this mesh does not include normals.
+     [self setVertexNormal: vtxNml at: vIdx];
+     
+     // Vertex texture coordinates derived from the barycentric coordinates and inverted vertically.
+     // Will do nothing if this mesh does not include texture coordinates.
+     GLfloat u = bw0 * tc[0].u + bw1 * tc[1].u + bw2 * tc[2].u;
+     GLfloat v = bw0 * tc[0].v + bw1 * tc[1].v + bw2 * tc[2].v;
+     [self setVertexTexCoord2F: cc3tc(u, (1.0f - v)) at: vIdx];
+     
+     // First tessellated triangle starting at the vertex and opening away from corner 0.
+     if (i1 < divsSimSide1) {
+     [self setVertexIndex: vIdx at: iIdx++];
+     [self setVertexIndex: (vIdx + 1) at: iIdx++];
+     [self setVertexIndex: (vIdx + divsSimSide1 + 1) at: iIdx++];
+     }
+     
+     // Second tessellated triangle starting at the vertex and opening towards corner 0.
+     if (i1 > 0 && i2 > 0) {
+     [self setVertexIndex: vIdx at: iIdx++];
+     [self setVertexIndex: (vIdx - 1) at: iIdx++];
+     [self setVertexIndex: (vIdx - divsSimSide1 - 2) at: iIdx++];
+     }
+     
+     vIdx++;		// Move on to the next vertex
+     }
+     }
+     }
+
+     
+
+     
+     */
+
     
     //CCActionInterval* partialRot = [CC3RotateBy actionWithDuration: 1.0 rotateBy: cc3v(0.0, 30.0, 0.0)];
 	//[aNode runAction: [CCRepeatForever actionWithAction: partialRot]];

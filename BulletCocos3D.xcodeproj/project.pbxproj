@@ -11,7 +11,9 @@
 		9F67B621170566AF009F714A /* obj_parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F67B619170566AF009F714A /* obj_parser.cpp */; };
 		9F67B622170566AF009F714A /* objLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F67B61B170566AF009F714A /* objLoader.cpp */; };
 		9F67B624170566AF009F714A /* string_extra.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F67B61E170566AF009F714A /* string_extra.cpp */; };
-		9F67B62717056CD6009F714A /* cube.obj in Resources */ = {isa = PBXBuildFile; fileRef = 9F67B62617056CD6009F714A /* cube.obj */; };
+		9F67B62A1705771C009F714A /* cube.pod in Resources */ = {isa = PBXBuildFile; fileRef = 9F67B629170576D1009F714A /* cube.pod */; };
+		9F67B62C17057922009F714A /* duck.pod in Resources */ = {isa = PBXBuildFile; fileRef = 9F67B62B1705791A009F714A /* duck.pod */; };
+		9F67B62E17057A2E009F714A /* bike.pod in Resources */ = {isa = PBXBuildFile; fileRef = 9F67B62D17057A24009F714A /* bike.pod */; };
 		9FA3E55417041DB800FF618C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FA3E55317041DB800FF618C /* QuartzCore.framework */; };
 		9FA3E55617041DB800FF618C /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FA3E55517041DB800FF618C /* OpenGLES.framework */; };
 		9FA3E55817041DB800FF618C /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FA3E55717041DB800FF618C /* OpenAL.framework */; };
@@ -463,6 +465,9 @@
 		9F67B61E170566AF009F714A /* string_extra.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = string_extra.cpp; sourceTree = "<group>"; };
 		9F67B61F170566AF009F714A /* string_extra.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = string_extra.h; sourceTree = "<group>"; };
 		9F67B62617056CD6009F714A /* cube.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cube.obj; sourceTree = "<group>"; };
+		9F67B629170576D1009F714A /* cube.pod */ = {isa = PBXFileReference; lastKnownFileType = file; name = cube.pod; path = Resources/cube.pod; sourceTree = "<group>"; };
+		9F67B62B1705791A009F714A /* duck.pod */ = {isa = PBXFileReference; lastKnownFileType = file; path = duck.pod; sourceTree = "<group>"; };
+		9F67B62D17057A24009F714A /* bike.pod */ = {isa = PBXFileReference; lastKnownFileType = file; path = bike.pod; sourceTree = "<group>"; };
 		9FA3E55017041DB800FF618C /* BulletCocos3D.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BulletCocos3D.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FA3E55317041DB800FF618C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		9FA3E55517041DB800FF618C /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -1571,6 +1576,9 @@
 		9FA3E56617041DB800FF618C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				9F67B629170576D1009F714A /* cube.pod */,
+				9F67B62B1705791A009F714A /* duck.pod */,
+				9F67B62D17057A24009F714A /* bike.pod */,
 				9FA3E56717041DB800FF618C /* Default.png */,
 				9FA3E56917041DB800FF618C /* Default-Landscape~ipad.png */,
 				9FA3E56B17041DB800FF618C /* fps_images.png */,
@@ -3438,6 +3446,8 @@
 				9FA3E8A917041DBC00FF618C /* CC3SingleTextureWithAlphaTest.fsh in Resources */,
 				9FA3E8BA17041DBC00FF618C /* hello-world.pod in Resources */,
 				9FA3EDB5170422F100FF618C /* Doxyfile in Resources */,
+				9F67B62A1705771C009F714A /* cube.pod in Resources */,
+				9F67B62C17057922009F714A /* duck.pod in Resources */,
 				9FA3EDE6170422F100FF618C /* ApplyForces.hlsl in Resources */,
 				9FA3EDE7170422F100FF618C /* ComputeBounds.hlsl in Resources */,
 				9FA3EDE8170422F100FF618C /* Integrate.hlsl in Resources */,
@@ -3453,9 +3463,9 @@
 				9FA3EDF2170422F100FF618C /* UpdatePositions.hlsl in Resources */,
 				9FA3EDF3170422F100FF618C /* UpdatePositionsFromVelocities.hlsl in Resources */,
 				9FA3EDF4170422F100FF618C /* VSolveLinks.hlsl in Resources */,
+				9F67B62E17057A2E009F714A /* bike.pod in Resources */,
 				9FA3EE02170422F100FF618C /* readme.txt in Resources */,
 				9FA3EE07170422F100FF618C /* readme.txt in Resources */,
-				9F67B62717056CD6009F714A /* cube.obj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
