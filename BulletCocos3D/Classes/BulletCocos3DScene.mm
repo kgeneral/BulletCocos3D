@@ -226,8 +226,8 @@
     
     
 	//[self addContentFromPODFile: @"hello-world.pod"];
-    //[self addContentFromPODFile: @"cube.pod"];
-    [self addContentFromPODFile: @"duck.pod"];
+    [self addContentFromPODFile: @"cube.pod"];
+    //[self addContentFromPODFile: @"duck.pod"];
     //[self addContentFromPODFile: @"bike.pod"];
 	
 	// Create OpenGL ES buffers for the vertex arrays to keep things fast and efficient,
@@ -265,16 +265,17 @@
 	
 	// Fetch the 'hello, world' 3D text object that was loaded from the
 	// POD file and start it rotating
-	CC3MeshNode* duck = (CC3MeshNode*)[self getNodeNamed: @"LOD3sp"];
-    
-    
-    
-//    duck.
-    
-    
+	//CC3MeshNode* duck = (CC3MeshNode*)[self getNodeNamed: @"LOD3sp"];
+    CC3MeshNode* mesh = (CC3MeshNode*)[self getNodeNamed: @"Box"];
 //    CCActionInterval* partialRot = [CC3RotateBy actionWithDuration: 1.0 rotateBy: cc3v(0.0, 30.0, 0.0)];
-//	[helloTxt runAction: [CCRepeatForever actionWithAction: partialRot]];
-	
+//    [mesh runAction: [CCRepeatForever actionWithAction: partialRot]];
+    
+
+	//TODO
+    // find vertexlist, normallist, indexlist from CC3MeshNode
+    // add bullet mesh data  from CC3MeshNode
+    // each timestep, reload vertexlist, normallist, indexlist from bullet object
+    // set reloaded vertexlist, normallist, indexlist to CC3MeshNode
 
 
 
@@ -451,6 +452,7 @@
 	// the camera to view the entire scene.
 //	LogDebug(@"Camera: %@", activeCamera.fullDescription);
     
+    /*
     //print positions of all objects
     for (int j=dynamicsWorld->getNumCollisionObjects()-1; j>=0 ;j--)
     {
@@ -461,9 +463,36 @@
             btTransform trans;
             body->getMotionState()->getWorldTransform(trans);
 //            [self getCubeFromVertices:obj vertexList:gCubeVertexList];
+            
+            //DISABLE_SIMULATION
+            btBoxShape* boxShape = dynamic_cast<btBoxShape *>(obj->getCollisionShape());
+            btRigidBody* body = btRigidBody::upcast(obj);
+            if (!(body && body->getMotionState())) return;
+            
+            float invMass = body->getInvMass();
+            //NSLog(@"getInvMass = %f", invMass);
+            
+            btVector3 vertex[8];
+            int numofvertex = boxShape->getNumVertices();
+            for(int i=0;i<numofvertex;i++){
+                boxShape->getVertex(i, vertex[i]);
+                
+                 btVector3 vertexBasis;
+                 boxShape->getVertex(i, vertexBasis);
+                 vertex[i] = trans*vertexBasis;
+                 
+                //vertex[i];
+                btVector3 vertexAfterTransform = trans*vertexBasis;
+                
+                //NSLog(@"vertex index = %d, pos = %f,%f,%f",i,vertexBasis.getX(),vertexBasis.getY(),vertexBasis.getZ());
+                //NSLog(@"vertex index = %d, pos = %f,%f,%f",i,vertexAfterTransform.getX(),vertexAfterTransform.getY(),vertexAfterTransform.getZ());
+            }
+
+            
         }
         
     }
+      */
 }
 
 
